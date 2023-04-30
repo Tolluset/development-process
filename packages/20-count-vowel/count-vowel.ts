@@ -8,4 +8,11 @@
  * "Nabe Atsu" => 4
  */
 
-export const countVowel = (/* word: string */) => {}
+export const countVowel = (word: string) => {
+  const vowels = ['a', 'e', 'i', 'o', 'u'];
+
+  return word
+    .toLowerCase()
+    .split('')
+    .filter((char) => vowels.includes(char)).length;
+};
