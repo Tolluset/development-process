@@ -8,4 +8,19 @@
  * 5. 3と4の条件を同時に満たす場合、アホな犬になる（例: `[ ..., 13, 14, 'ahobow', 16, ...]`）
  */
 
-export const nabeatsu = (/* len: number */) => {}
+export const nabeatsu = (len: number) => {
+  const result = [];
+
+  for (let i = 1; i <= len; i++) {
+    if (i % 3 === 0 && i % 5 === 0) {
+      result.push('ahobow');
+    } else if (i % 3 === 0) {
+      result.push('aho');
+    } else if (i % 5 === 0) {
+      result.push('bow');
+    } else {
+      result.push(i);
+    }
+  }
+  return result;
+};
