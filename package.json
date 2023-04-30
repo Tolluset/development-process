@@ -28,6 +28,7 @@
     "secretlint": "5.1.1",
     "ts-node": "10.7.0",
     "typescript": "4.6.2",
+    "vite": "4.3.3",
     "vitest": "0.7.10"
   },
   "lint-staged": {
