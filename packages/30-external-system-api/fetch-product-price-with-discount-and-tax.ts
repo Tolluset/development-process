@@ -81,5 +81,5 @@ export const fetchProductPriceWithDiscountAndTax = async (
   }
 
   // 合計金額(税込)を返す
-  return Math.ceil(total * 1.1)
+  return Math.floor(total * 1.1)
 }
