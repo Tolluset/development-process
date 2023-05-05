@@ -16,7 +16,7 @@ npm run test-s
 準備:
 
 ```bash
-docker run -it --rm -e SERVICES=dynamodb -e INIT_SCRIPTS_PATH=/docker-entrypoint-initaws.d -e DEFAULT_REGION='ap-northeast-1' -p 4566:4566 -v $(pwd)/test/medium/init:/docker-entrypoint-initaws.d localstack/localstack:0.14
+docker run -it --rm -e SERVICES=dynamodb -e INIT_SCRIPTS_PATH=/docker-entrypoint-initaws.d -e DEFAULT_REGION='ap-northeast-1' -e DYNAMODB_SHARE_DB=1 -p 4566:4566 -v $(pwd)/test/medium/init:/docker-entrypoint-initaws.d localstack/localstack:0.14
 ```
 
 テスト実行:
