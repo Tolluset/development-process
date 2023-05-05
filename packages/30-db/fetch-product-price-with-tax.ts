@@ -26,16 +26,16 @@ export interface Product {
  * 商品の値段を消費税(10%)込みで返す
  */
 export const fetchProductPriceWithTax = async (
-  productNo: string
+  productNo: string,
+  ddbDoc: DynamoDBDocument = DynamoDBDocument.from(
+    new DynamoDB({
+      credentials: {
+        accessKeyId: 'DUMMY',
+        secretAccessKey: 'DUMMY',
+      },
+    })
+  )
 ): Promise<number> => {
-  const ddb = new DynamoDB({
-    credentials: {
-      accessKeyId: 'DUMMY',
-      secretAccessKey: 'DUMMY',
-    },
-  })
-  const ddbDoc = DynamoDBDocument.from(ddb)
-
   const getOutput = await ddbDoc.get({
     TableName: 'products',
     Key: {
@@ -43,5 +43,5 @@ export const fetchProductPriceWithTax = async (
     },
   })
   const product = getOutput.Item as Product
-  return Math.ceil(product.price * 1.1) // 切り上げ
+  return Math.floor(product.price * 1.1) // 切り上げ
 }
