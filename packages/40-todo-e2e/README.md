@@ -8,6 +8,12 @@
 
 ## 起動方法
 
+playwright を install する
+
+```console
+npx playwright install
+```
+
 このディレクトリにて以下を唱える。
 
 ```console

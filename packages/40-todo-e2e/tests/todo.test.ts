@@ -25,9 +25,27 @@ test('basic test', async ({ page }) => {
 
   await page.fill('input[name="content"]', 'テスト')
   await page.click('text="Todo追加"')
-  await expect(page.locator('li >> nth=0')).toContainText('テスト')
 
-  // DBにデータが追加されていることを確認する
+  // await expect(page.getByRole('listitem', { name: 'テスト' })).toBeVisible()
+  await expect(
+    page.getByRole('listitem').filter({ hasText: 'テスト' })
+  ).toBeVisible()
+
+  // DBにデータが追加されていることを確認する0ki 66
+  await page.reload()
+  await expect(
+    page.getByRole('listitem').filter({ hasText: 'テスト' })
+  ).toBeVisible()
+
   // 削除ボタンの動作と確認
+  await page.click('text="Todo削除"')
+  await expect(
+    page.getByRole('listitem').filter({ hasText: 'テスト' })
+  ).not.toBeVisible()
+
   // DBからデータが消されていることを確認する
+  await page.reload()
+  await expect(
+    page.getByRole('listitem').filter({ hasText: 'テスト' })
+  ).not.toBeVisible()
 })
