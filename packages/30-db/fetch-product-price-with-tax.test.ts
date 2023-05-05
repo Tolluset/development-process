@@ -14,5 +14,5 @@ const ddbDoc = {
 
 test('商品Noから消費税込みの値段を取得する', async () => {
   const result = await fetchProductPriceWithTax('0001', ddbDoc)
-  expect(result).toBeCloseTo(110)
+  expect(result).toBe(110)
 })
