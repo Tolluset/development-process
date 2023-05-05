@@ -17,8 +17,41 @@ beforeEach(async () => {
   })
 })
 
+/**
+ * 実際のリソースの設定や権限なとのバグが検出できる
+ */
 test('test', async () => {
+  const command = new InvokeCommand({
+    FunctionName: 'shinsotsu-kenshu-function',
+    Payload: Buffer.from(
+      JSON.stringify({ id: 1, name: 'test-name_after', age: 18 })
+    ),
+  })
   // 1. lambdaを呼び出して、
-  // 2. レスポンスを確認し、
-  // 3. DynamoDBの値が期待通り変更されているかを確認しましょう。
+  try {
+    const { Payload } = await lambdaClient.send(command)
+    if (Payload === undefined) throw new Error('Payload is undefined')
+
+    const response = JSON.parse(Buffer.from(Payload).toString())
+
+    // 2. レスポンスを確認し、
+    expect(response).toEqual({
+      ok: true,
+      data: { id: 1, name: 'test-name_after', age: 18 },
+    })
+
+    // 3. DynamoDBの値が期待通り変更されているかを確認しましょう。
+    const item = await documentClient.get({
+      TableName: 'shinsotsu-kenshu-table',
+      Key: { id: 1 },
+    })
+
+    expect(item.Item).toEqual({
+      id: 1,
+      name: 'test-name_after',
+      age: 18,
+    })
+  } catch (e) {
+    console.error(e)
+  }
 })
