@@ -3,7 +3,6 @@
 /* eslint-disable no-await-in-loop */
 import { DynamoDB } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
-import { request } from 'undici'
 
 /**
  * 商品
@@ -44,30 +43,28 @@ export interface Campaign {
  * 複数商品についてキャンペーン値引きと消費税(10%)込の値段合計を返す
  */
 export const fetchProductPriceWithDiscountAndTax = async (
-  productNos: string[]
+  productNos: string[],
+  campaign: Campaign,
+  dynamoDBDocument: DynamoDBDocument = DynamoDBDocument.from(
+    new DynamoDB({
+      credentials: {
+        accessKeyId: 'DUMMY',
+        secretAccessKey: 'DUMMY',
+      },
+    })
+  )
 ): Promise<number> => {
-  // キャンペーン情報を取得
-  const { body } = await request('https://campaign.example.com/api')
-  const campaign: Campaign = await body.json()
-
-  const ddb = new DynamoDB({
-    credentials: {
-      accessKeyId: 'DUMMY',
-      secretAccessKey: 'DUMMY',
-    },
-  })
-  const ddbDoc = DynamoDBDocument.from(ddb)
-
   // 合計金額(税抜)
   let total = 0
   for (const productNo of productNos) {
     // DBから商品情報を取得
-    const getOutput = await ddbDoc.get({
+    const getOutput = await dynamoDBDocument.get({
       TableName: 'products',
       Key: {
         no: productNo,
       },
     })
+
     const product = getOutput.Item as Product
 
     if (campaign.targetProductNos.includes(product.no)) {
@@ -81,5 +78,5 @@ export const fetchProductPriceWithDiscountAndTax = async (
   }
 
   // 合計金額(税込)を返す
-  return Math.ceil(total * 1.1)
+  return Math.floor(total * 1.1)
 }
