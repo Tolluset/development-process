@@ -5,7 +5,14 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
 const documentClient = DynamoDBDocument.from(
-  new DynamoDBClient({ endpoint: 'http://localhost:4566' })
+  new DynamoDBClient({
+    endpoint: 'http://localhost:4566',
+    region: 'ap-northeast-1',
+    credentials: {
+      accessKeyId: 'DUMMY',
+      secretAccessKey: 'DUMMY',
+    },
+  })
 )
 
 test.beforeEach(async () => {
